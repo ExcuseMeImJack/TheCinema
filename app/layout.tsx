@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import AuthStatus from "@/components/auth-status";
 import { Suspense } from "react";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,8 +24,7 @@ export const metadata: Metadata = {
     title,
     description,
   },
-  metadataBase: new URL("https://nextjs-postgres-auth.vercel.app"),
-  themeColor: "#FFF",
+  metadataBase: new URL("https://nextjs-postgres-auth.vercel.app")
 };
 
 export default async function RootLayout({
@@ -36,10 +36,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <Toaster />
-        <Suspense fallback="Loading...">
-          <AuthStatus />
-        </Suspense>
-        {children}
+        <Navbar />
+        <div className="h-[88vh]">
+          {children}
+        </div>
       </body>
     </html>
   );

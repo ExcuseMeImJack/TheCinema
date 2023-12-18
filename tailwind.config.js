@@ -5,6 +5,9 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      'HeaderFont': ['Concert One', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [],
