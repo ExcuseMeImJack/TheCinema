@@ -1,10 +1,20 @@
+"use client"
+
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SocialIcon } from 'react-social-icons'
 
 function Footer() {
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, [])
+
   return (
-    <div className='bg-[#212022] w-screen h-[12vh] border-t-4 border-[#DEDEDE] flex justify-evenly items-center'>
+    isClient && (
+    <div className='bg-[#212022] w-screen h-[11vh] border-t-4 border-[#DEDEDE] flex justify-evenly items-center'>
       <Link className='flex items-center hover:text-gray-400' href='https://github.com/ExcuseMeImJack' target='_blank' >
         <SocialIcon network='github' bgColor='transparent'/>
         <h1 className='font-HeaderFont font-bold pt-1'>ExcuseMeImJack</h1>
@@ -13,7 +23,7 @@ function Footer() {
         <SocialIcon network='linkedin' bgColor='transparent'/>
         <h1 className='font-HeaderFont font-bold pt-1'>Jack Roybal</h1>
       </Link>
-    </div>
+    </div>)
   )
 }
 

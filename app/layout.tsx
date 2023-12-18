@@ -37,7 +37,7 @@ export default async function RootLayout({
       <body className={inter.variable}>
         <Toaster />
         <Navbar />
-        <div className="h-[88vh]">
+        <div className="h-[89vh]">
           {children}
         </div>
       </body>
