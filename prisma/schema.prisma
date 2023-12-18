@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
@@ -10,14 +10,138 @@ datasource db {
   provider = "postgresql"
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+model ShowLists {
+  id      Int          @id @default(autoincrement())
+  show    ShowsFromAPI @relation(fields: [show_id], references: [show_api_id])
+  show_id String
+  list    Lists        @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model FilmLists {
+  id      Int          @id @default(autoincrement())
+  film    FilmsFromAPI @relation(fields: [film_id], references: [film_api_id])
+  film_id String
+  list    Lists        @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model ShowsFromAPI {
+  id           String         @id
+  show_api_id  String         @unique
+  ShowLists    ShowLists[]
+  ShowsToWatch ShowsToWatch[]
+  ShowLikes    ShowLikes[]
+  Reviews      Reviews[]
+}
+
+model FilmsFromAPI {
+  id           String         @id
+  film_api_id  String         @unique
+  FilmLists    FilmLists[]
+  FilmsToWatch FilmsToWatch[]
+  FilmLikes    FilmLikes[]
+  Reviews      Reviews[]
+}
+
+model Lists {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  is_private  Boolean
+  user        User        @relation(fields: [user_id], references: [id])
+  user_id     Int
+  ShowLists   ShowLists[]
+  FilmLists   FilmLists[]
+  ListLikes   ListLikes[]
+}
+
+model ListLikes {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [user_id], references: [id])
+  user_id Int
+  list    Lists @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model ShowsToWatch {
+  id      Int          @id @default(autoincrement())
+  user    User         @relation(fields: [user_id], references: [id])
+  user_id Int
+  show    ShowsFromAPI @relation(fields: [show_id], references: [id])
+  show_id String
+}
+
+model FilmsToWatch {
+  id      Int          @id @default(autoincrement())
+  user    User         @relation(fields: [user_id], references: [id])
+  user_id Int
+  film    FilmsFromAPI @relation(fields: [film_id], references: [id])
+  film_id String
+}
+
+model FilmLikes {
+  id      Int          @id @default(autoincrement())
+  user    User         @relation(fields: [user_id], references: [id])
+  user_id Int
+  film    FilmsFromAPI @relation(fields: [film_id], references: [id])
+  film_id String
+}
+
+model ShowLikes {
+  id      Int          @id @default(autoincrement())
+  user    User         @relation(fields: [user_id], references: [id])
+  user_id Int
+  show    ShowsFromAPI @relation(fields: [show_id], references: [id])
+  show_id String
+}
+
+model Reviews {
+  id          Int           @id @default(autoincrement())
+  review_text String
+  rating      Float
+  user        User          @relation(fields: [user_id], references: [id])
+  user_id     Int
+  film        FilmsFromAPI? @relation(fields: [film_id], references: [id])
+  film_id     String?
+  show        ShowsFromAPI? @relation(fields: [show_id], references: [id])
+  show_id     String?
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  username  String  @unique
-  hashed_password  String
-  profile_picture  String?
-  creation_date  DateTime @default(now())
+  id              Int            @id @default(autoincrement())
+  username        String         @unique
+  email           String         @unique
+  password        String
+  is_private      Boolean?
+  profile_pic_url String?
+  Lists           Lists[]
+  ListLikes       ListLikes[]
+  ShowsToWatch    ShowsToWatch[]
+  FilmsToWatch    FilmsToWatch[]
+  FilmLikes       FilmLikes[]
+  ShowLikes       ShowLikes[]
+  Reviews         Reviews[]
+  Friends         Friends[]
+}
+
+// model DirectMessages{
+//     id          Int     @id @default(autoincrement())
+//     message     String
+//     sender User @relation(fields: [user_from_id], references: [id])
+//     user_from_id Int
+//     recipient  User @relation(fields: [user_to_id], references: [id])
+//     user_to_id  Int
+//     friend   Friends? @relation(fields: [friend_id], references: [id])
+//     friend_id Int
+// }
+
+model Friends {
+  id        Int  @id @default(autoincrement())
+  friend_id Int
+  user      User @relation(fields: [user_id], references: [id])
+  user_id   Int
+  // DirectMessages DirectMessages[]
 }

@@ -28,7 +28,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
               toast.error(error);
             } else {
               router.refresh();
-              router.push("/protected");
+              router.push("/");
             }
           });
         } else {
@@ -39,6 +39,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
             },
             body: JSON.stringify({
               email: e.currentTarget.email.value,
+              username: e.currentTarget.username.value,
               password: e.currentTarget.password.value,
             }),
           }).then(async (res) => {
@@ -68,12 +69,28 @@ export default function Form({ type }: { type: "login" | "register" }) {
           id="email"
           name="email"
           type="email"
-          placeholder="panic@thedis.co"
           autoComplete="email"
           required
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
         />
       </div>
+      {type === "register" &&
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-xs text-gray-600 uppercase"
+          >
+            Username
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="username"
+            required
+            className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+          />
+        </div>
+      }
       <div>
         <label
           htmlFor="password"
@@ -91,11 +108,10 @@ export default function Form({ type }: { type: "login" | "register" }) {
       </div>
       <button
         disabled={loading}
-        className={`${
-          loading
+        className={`${loading
             ? "cursor-not-allowed border-gray-200 bg-gray-100"
             : "border-black bg-black text-white hover:bg-white hover:text-black"
-        } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+          } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
       >
         {loading ? (
           <LoadingDots color="#808080" />
