@@ -3,31 +3,75 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/lib/prisma";
 import { compare } from "bcrypt";
+import { User } from "@prisma/client";
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt'
+  },
   providers: [
     CredentialsProvider({
+      name: 'Sign in',
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'hello@example.com'
+        },
+        password: { label: 'Password', type: 'password'}
       },
-      async authorize(credentials: Record<"email" | "password", string> | undefined) {
-        const { email, password } = credentials ?? {};
-        if (!email || !password) {
-          throw new Error("Missing username or password");
+      async authorize(credentials) {
+        if(!credentials?.email || !credentials.password) {
+          return null;
         }
+
         const user = await prisma.user.findUnique({
           where: {
-            email,
-          },
+            email: credentials.email
+          }
         });
-        if (!user || !(await compare(password, user.password))) {
-          throw new Error("Invalid username or password");
+
+        if(!user) {
+          return null
         }
-        return user;
+
+        const isPasswordValid = await compare(credentials.password, user.password);
+
+        if(!isPasswordValid) {
+          return null
+        }
+
+        return {
+          id: user.id + '',
+          email: user.email,
+          username: user.username
+        }
+
       },
+
     }),
   ],
+  callbacks: {
+    session: ({session, token}) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id:token.id
+        }
+      }
+    },
+    jwt: ({token, user}) => {
+      if(user) {
+        const u = user as unknown as User
+        return {
+          ...token,
+          id: user.id
+        }
+      }
+      return token;
+    }
+  }
 };
 
 const handler = NextAuth(authOptions);

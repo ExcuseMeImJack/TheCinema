@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -6,11 +8,12 @@ import CreateAccount from '../Auth/CreateAccount';
 import UserProfileDropdown from './UserProfileDropdown';
 import NavCreate from './NavCreate';
 import NavBarLogo from './NavBarLogo';
-import { getSession, useSession } from 'next-auth/react';
+import { SessionProvider, getSession, useSession } from 'next-auth/react';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
 
-async function Navbar() {
-
-  const {data: session} = useSession();
+function Navbar() {
+  const { data: session } = useSession();
 
   return (
     <div className='static bg-[#212022] w-screen h-[11vh] border-b-4 border-[#DEDEDE] flex justify-evenly items-center font-HeaderFont font-bold text-lg'>
@@ -24,7 +27,7 @@ async function Navbar() {
           <CreateAccount />
         </>
       ) : (
-        <UserProfileDropdown />
+          <UserProfileDropdown />
       )}
 
       {/* Site Sections */}

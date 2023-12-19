@@ -3,12 +3,13 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import AuthStatus from "@/components/auth-status";
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import { SessionProvider } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { Providers } from "./providers";
+import App from "./App";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,19 +35,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const session = await getServerSession(authOptions);
-
+  // console.log(session)
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Toaster />
-        <SessionProvider session={session}>
-          <Navbar />
-          <div className="h-[89vh]">
-            {children}
-          </div>
-        </SessionProvider>
+        <Providers>
+          <Toaster />
+            <App>
+              {children}
+            </App>
+        </Providers>
       </body>
     </html>
   );
