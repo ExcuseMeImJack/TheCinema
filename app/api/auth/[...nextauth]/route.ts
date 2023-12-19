@@ -8,8 +8,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        email: { label: "Email", type: "text" }, // Changed type from "email" to "text"
-        password: { label: "Password", type: "password" }, // Type remains "password"
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Record<"email" | "password", string> | undefined) {
         const { email, password } = credentials ?? {};
