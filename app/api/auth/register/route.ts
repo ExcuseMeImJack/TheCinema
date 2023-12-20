@@ -19,7 +19,8 @@ export async function POST(req: Request) {
         email,
         username,
         password: await hash(password, 10),
-        is_private: false
+        is_private: false,
+        profile_pic_url: "https://d3ki9tyy5l5ruj.cloudfront.net/obj/3d4665c7cf119dc9dc38232301b18fa68b9bb17c/avatar.svg"
       },
     });
     return NextResponse.json(user);

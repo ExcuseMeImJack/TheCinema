@@ -49,6 +49,19 @@ function SignIn() {
       if (res.status === 200) {
         setTimeout(() => {
           router.push("/");
+          signIn("credentials", {
+            redirect: false,
+            email,
+            password
+          }).then(({ error }) => {
+            if (error) {
+              setLoading(false);
+              setErrors(error);
+            } else {
+              router.refresh();
+              router.push('/');
+            }
+          })
         }, 2000);
       } else {
         const { error } = await res.json();
