@@ -1,7 +1,36 @@
-import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
+import prisma from '@/lib/prisma';
+import { NextResponse } from "next/server";
+import { Session, getServerSession } from "next-auth";
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-  return session?.user;
+  try {
+    const session = (await getServerSession(authOptions)) as Session | null;
+
+    if (!session || !session.user || !session.user.email) {
+      return NextResponse.json({ error: "Session not found or user email missing" }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email as string
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        profile_pic_url: true,
+        is_private: true
+      }
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

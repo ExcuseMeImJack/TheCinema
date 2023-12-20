@@ -75,7 +75,7 @@ function SignIn() {
     setLoading(true);
     signIn("credentials", {
       redirect: false,
-      email: "Tester@test.io",
+      email: "Tester4@test.io",
       password: "password"
     }).then(({ error }) => {
       if (error) {

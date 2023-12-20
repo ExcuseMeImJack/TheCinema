@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SignIn from '../Auth/SignIn';
@@ -11,23 +11,26 @@ import NavBarLogo from './NavBarLogo';
 import { SessionProvider, getSession, useSession } from 'next-auth/react';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import Loading from '../Loading';
 
 function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if(status === "loading") return <Loading/>
+
 
   return (
     <div className='static bg-[#212022] w-screen h-[11vh] border-b-4 border-[#DEDEDE] flex justify-evenly items-center font-HeaderFont font-bold text-lg'>
-
       <NavBarLogo/>
 
       {/* Sign/Signout OR User Profile */}
-      {!session ? (
+      {status === "unauthenticated" ? (
         <>
-          <SignIn />
+          <SignIn/>
           <CreateAccount />
         </>
       ) : (
-          <UserProfileDropdown />
+        status === "authenticated" ? ( <UserProfileDropdown/> ) : (<Loading/>)
       )}
 
       {/* Site Sections */}
@@ -37,9 +40,10 @@ function Navbar() {
       <Link className='hover:text-gray-400' href="/members">MEMBERS</Link>
 
       {/* Create Section */}
-      {session &&
+      {status === "authenticated" &&
         <NavCreate />
       }
+
     </div>
   )
 }

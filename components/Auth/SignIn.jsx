@@ -1,8 +1,9 @@
 "use client"
 
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
+import Loading from '../../components/Loading'
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,8 @@ function SignIn() {
   const router = useRouter();
 
   const dropdownRef = useRef(null);
+
+  const {data: session, status} = useSession();
 
   useEffect(() => {
     const checkIfClickedOutside = e => {
@@ -29,6 +32,7 @@ function SignIn() {
     }
   }, [isOpen]);
 
+  if(status === "loading") return <Loading/>
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +58,7 @@ function SignIn() {
     setLoading(true);
     signIn("credentials", {
       redirect: false,
-      email: "Tester@test.io",
+      email: "Tester4@test.io",
       password: "password"
     }).then(({ error }) => {
       if (error) {
