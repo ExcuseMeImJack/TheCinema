@@ -16,7 +16,7 @@ import Loading from '../Loading';
 function Navbar() {
   const { data: session, status } = useSession();
 
-  if(status === "loading") return <Loading/>
+  if(status === "loading") return <Loading loader={1}/>
 
 
   return (
@@ -30,7 +30,7 @@ function Navbar() {
           <CreateAccount />
         </>
       ) : (
-        status === "authenticated" ? ( <UserProfileDropdown/> ) : (<Loading/>)
+        status === "authenticated" &&  <UserProfileDropdown/>
       )}
 
       {/* Site Sections */}

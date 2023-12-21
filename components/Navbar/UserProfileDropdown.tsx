@@ -1,6 +1,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import Loading from '../Loading';
+import { BarLoader } from 'react-spinners';
 
 function UserProfileDropdown() {
   const [user, setUser] = useState(null);
@@ -26,24 +27,24 @@ function UserProfileDropdown() {
     getUser();
   }, [status])
 
-  if (status === 'loading' || !user || !session) return <Loading/>;
+  if (status === 'loading' || !user || !session) return <Loading loader={2}/>;
 
   const currUser = Object.values(user)[0];
   const { username, profile_pic_url } = currUser;
 
-  if (!currUser) return <Loading/>;
+  if (!currUser || !username || !profile_pic_url) return <Loading loader={2}/>;
 
   return (
     <div className="dropdown">
       <div tabIndex={0} role="button" className="flex items-center gap-2 hover:text-gray-400" >
         <div className="avatar rounded-full">
-          <div className="w-8">
-            {profile_pic_url && <img src={profile_pic_url} alt='' />}
+          <div className="w-6">
+            <img src={profile_pic_url} alt='' />
           </div>
         </div>
         {username.toUpperCase()}
       </div>
-      <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-[#212022] rounded-box w-32 mt-2 border-2 border-[#DEDEDE]">
+      <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-[#212022] rounded-box w-48 mt-2 border-2 border-[#DEDEDE]">
         <li><a>Profile</a></li>
         <li><a>Watchlist</a></li>
         <li><a>Lists</a></li>

@@ -24,10 +24,8 @@ function App({children}: imports) {
     isClient &&
       <>
         {status === "loading" ? (
-          <Loading/>
+          <Loading loader={1}/>
         ) : (
-          status === "authenticated" &&
-          // Create 2 Navbars, 1 for signed out and 1 for logged in
           <>
             <Navbar />
             <div className="h-[89vh]">
