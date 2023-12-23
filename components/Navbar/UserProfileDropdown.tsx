@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
 import Loading from '../Loading';
 import { BarLoader } from 'react-spinners';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 function UserProfileDropdown() {
   const [user, setUser] = useState(null);
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
@@ -55,7 +57,11 @@ function UserProfileDropdown() {
         <li><Link href="/profile/watchlist">Watchlist</Link></li>
         <li><Link href="/profile/lists">Lists</Link></li>
         <li><Link href="/profile/friends">Friends</Link></li>
-        <li><div onClick={() => signOut()}>Sign Out</div></li>
+        <li><div onClick={() => {
+          signOut();
+          router.refresh();
+          router.push('/');
+        }}>Sign Out</div></li>
       </ul>
     </div>
   )

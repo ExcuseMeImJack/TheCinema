@@ -21,6 +21,10 @@ export async function POST(req: Request) {
       }
     });
 
+    if(!user) {
+      return NextResponse.json({ error: "Username not found" }, { status: 404 })
+    }
+
     return NextResponse.json(user);
   } catch (error) {
     return NextResponse.json({ error: "Username not found" }, { status: 404 })
