@@ -34,10 +34,10 @@ function Navbar() {
       )}
 
       {/* Site Sections */}
-      <Link className='hover:text-gray-400' href="/films">FILMS</Link>
-      <Link className='hover:text-gray-400' href="/shows">SHOWS</Link>
-      <Link className='hover:text-gray-400' href="/lists">LISTS</Link>
-      <Link className='hover:text-gray-400' href="/members">MEMBERS</Link>
+      <Link className='hover:text-gray-400 xl:text-2xl lg:text-xl m:text-md sm:text-sm' href="/films">FILMS</Link>
+      <Link className='hover:text-gray-400 xl:text-2xl lg:text-xl m:text-md sm:text-sm' href="/shows">SHOWS</Link>
+      <Link className='hover:text-gray-400 xl:text-2xl lg:text-xl m:text-md sm:text-sm' href="/lists">LISTS</Link>
+      <Link className='hover:text-gray-400 xl:text-2xl lg:text-xl m:text-md sm:text-sm' href="/members">MEMBERS</Link>
 
       {/* Create Section */}
       {status === "authenticated" &&
