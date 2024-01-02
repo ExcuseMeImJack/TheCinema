@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     const session = (await getServerSession(authOptions)) as Session | null;
 
     if (!session || !session.user || !session.user.email) {
-      return NextResponse.json({ error: "Session not found or user email missing" }, { status: 401 });
+      return NextResponse.json(null, { status: 200 });
     }
 
     const user = await prisma.user.findUnique({
@@ -20,13 +20,17 @@ export async function GET(req: Request) {
         email: true,
         username: true,
         profile_pic_url: true,
-        is_private: true
+        is_private: true,
+        Lists: true,
+        ListLikes: true,
+        ShowsToWatch: true,
+        FilmsToWatch: true,
+        FilmLikes: true,
+        ShowLikes: true,
+        Reviews: true,
+        Friends: true
       }
     });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

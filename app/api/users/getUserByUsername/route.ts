@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const { username } = await req.json();
 
   if (!username) {
-    return NextResponse.json({ error: "Username is missing" }, { status: 401 });
+    return NextResponse.json({ error: "Username is required" }, { status: 401 });
   }
   try {
     const user = await prisma.user.findUnique({
@@ -17,7 +17,15 @@ export async function POST(req: Request) {
         email: true,
         username: true,
         profile_pic_url: true,
-        is_private: true
+        is_private: true,
+        Lists: true,
+        ListLikes: true,
+        ShowsToWatch: true,
+        FilmsToWatch: true,
+        FilmLikes: true,
+        ShowLikes: true,
+        Reviews: true,
+        Friends: true
       }
     });
 
