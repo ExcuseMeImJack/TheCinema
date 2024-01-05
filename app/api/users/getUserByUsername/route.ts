@@ -18,14 +18,6 @@ export async function POST(req: Request) {
         username: true,
         profile_pic_url: true,
         is_private: true,
-        Lists: true,
-        ListLikes: true,
-        ShowsToWatch: true,
-        FilmsToWatch: true,
-        FilmLikes: true,
-        ShowLikes: true,
-        Reviews: true,
-        Friends: true
       }
     });
 
