@@ -4,6 +4,7 @@ import Loading from '../Loading';
 import { BarLoader } from 'react-spinners';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import getCurrUser from '@/lib/FetchRequests/getCurrUser';
 
 function UserProfileDropdown() {
   const [user, setUser] = useState(null);
@@ -12,21 +13,8 @@ function UserProfileDropdown() {
 
   useEffect(() => {
     const getUser = async () => {
-      if (status === 'authenticated') {
-        try {
-          const res = await fetch('/api/users/getCurrUser');
-          if (res.ok) {
-            const loggedInUser = await res.json();
-            setUser(loggedInUser);
-          } else {
-            console.error('Failed to fetch user data:', res.statusText);
-          }
-        } catch (error) {
-          console.error('Error fetching user data', error)
-        }
-      }
+      setUser(await getCurrUser(status));
     }
-
     getUser();
   }, [status])
 
