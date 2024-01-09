@@ -4,7 +4,7 @@ import Loading from '../Loading';
 import { BarLoader } from 'react-spinners';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import getCurrUser from '@/lib/FetchRequests/getCurrUser';
+import {getCurrUser} from '@/lib/FetchRequests/users';
 
 function UserProfileDropdown() {
   const [user, setUser] = useState(null);
