@@ -61,7 +61,10 @@ export async function getCurrUserData(status:String, type:String) {
 export async function getUserByUsername(status:String, username:String) {
   if(status === "authenticated"){
     try {
-      const res = await fetch('/api/users/getUserByUsername');
+      const res = await fetch('/api/users/getUserByUsername', {
+        method: "POST",
+        body: JSON.stringify({username})
+      });
       if(res.ok) {
         const currUser = await res.json();
         return currUser;
