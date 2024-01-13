@@ -13,8 +13,10 @@ function Profile() {
   useEffect(() => {
     const getUser = async () => {
       const currUserObj = await getCurrUser(status);
-      const currUser = Object.values(currUserObj)[0];
-      setUser(currUser);
+      if(currUserObj) {
+        const currUser = Object.values(currUserObj)[0];
+        setUser(currUser);
+      }
     }
     getUser();
   }, [status])

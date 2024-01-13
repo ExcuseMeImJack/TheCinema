@@ -41,14 +41,14 @@ function UserProfileDropdown() {
         </div>
       </div>
       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-[#212022] rounded-box w-48 mt-2 border-2 border-[#DEDEDE]">
-        <li><Link href="/profile">Profile</Link></li>
-        <li><Link href="/profile/watchlist">Watchlist</Link></li>
-        <li><Link href="/profile/lists">Lists</Link></li>
-        <li><Link href="/profile/friends">Friends</Link></li>
-        <li><div onClick={() => {
-          signOut();
+        <li className='py-1 text-md'><Link href="/profile">Profile</Link></li>
+        <li className='py-1 text-md'><Link href="/profile/watchlist">Watchlist</Link></li>
+        <li className='py-1 text-md'><Link href="/profile/lists">Lists</Link></li>
+        <li className='py-1 text-md'><Link href="/profile/friends">Friends</Link></li>
+        <li className='py-1 text-md'><div onClick={() => {
           router.refresh();
           router.push('/');
+          signOut();
         }}>Sign Out</div></li>
       </ul>
     </div>
