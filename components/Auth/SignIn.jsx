@@ -74,7 +74,7 @@ function SignIn() {
   return (
     <>
       <div className="dropdown" ref={dropdownRef} onClick={() => setIsOpen(true)}>
-        <div tabIndex={0} role="button" className="hover:text-gray-400 xl:text-2xl lg:text-xl m:text-md sm:text-sm">SIGN IN</div>
+        <div tabIndex={0} role="button" className="hover:text-gray-400 xl:text-xl lg:text-lg m:text-md sm:text-sm">SIGN IN</div>
           <ul tabIndex={0}  className='dropdown-content z-[1] menu p-2 shadow bg-[#212022] rounded-box w-72 mt-2 border-2 border-[#DEDEDE]'>
             <form onSubmit={handleSubmit} className='flex flex-col gap-2'>
               <li>
