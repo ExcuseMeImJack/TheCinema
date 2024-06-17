@@ -4,7 +4,7 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@prisma/client', 'bcrypt']
   },
   images: {
-    domains: ['i.imgur.com'],
+    domains: ['i.imgur.com', 'image.tmdb.org'],
   },
   typescript: {
     ignoreBuildErrors: true,
