@@ -24,7 +24,7 @@ export default function Home() {
             alt={`Film Background Image: ${filmBackground}`}
             src={filmBackground ? `https://image.tmdb.org/t/p/original${filmBackground}` : "https://i.imgur.com/W2oTx5H.jpg"}
             layout='fill'
-            objectFit='cover'
+            objectFit='contain'
           />
         </div>
       </div>

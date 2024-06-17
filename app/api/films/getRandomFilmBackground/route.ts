@@ -9,7 +9,7 @@ export async function GET(req: Request) {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNTA0Y2NkNDZlMGFkNjllNzU3MjhiY2RmMGQyMjY2YyIsInN1YiI6IjY1NWJkMDZlZDRmZTA0MDExYjk0MWUyMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7HLvlhgYIqe1PtsPsQ2tKnUh2Jsr0oiMUJal0_az5v8'
+        Authorization: `Bearer ${process.env.TMDB_BEARER}`
       }
     };
 

@@ -3,7 +3,6 @@ export async function getRandomFilmBackground(){
     const res = await fetch('/api/films/getRandomFilmBackground');
     if(res.ok) {
       const filmBackgrounds = await res.json();
-      console.log(filmBackgrounds)
       return filmBackgrounds;
     }
   } catch (error) {
