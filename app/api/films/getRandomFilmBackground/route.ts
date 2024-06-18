@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession, Session } from "next-auth";
 
-const TMDB_API_URL = 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1';
+const TMDB_API_URL = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
 
 export async function GET(req: Request) {
   try {
@@ -21,9 +21,8 @@ export async function GET(req: Request) {
 
     const nowPlayingList = await response.json();
     const filmBackgrounds = nowPlayingList.results.map((film: any) => film.backdrop_path);
-    const filmBackgroundUrl = filmBackgrounds[Math.floor(Math.random() * filmBackgrounds.length)];
 
-    return NextResponse.json(filmBackgroundUrl, { status: 200 });
+    return NextResponse.json({filmBackgrounds}, { status: 200 });
   } catch (error) {
     console.error("Error fetching film background:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

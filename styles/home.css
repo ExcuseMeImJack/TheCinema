@@ -1,0 +1,31 @@
+.fade-container {
+  position: relative;
+}
+
+.fade-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(32, 32, 32, 1) 0%,         /* Start with full opacity */
+    rgba(32, 32, 32, 0.9) 5%,       /* Slight fade out */
+    rgba(32, 32, 32, 0.7) 10%,      /* Lighter fade out */
+    rgba(32, 32, 32, 0.5) 15%,      /* Even lighter fade out */
+    rgba(32, 32, 32, 0.3) 20%,      /* Very light fade out */
+    rgba(32, 32, 32, 0.1) 25%,      /* Almost transparent */
+    rgba(32, 32, 32, 0) 30%,        /* Fully transparent */
+    rgba(32, 32, 32, 0) 70%,        /* Fully transparent */
+    rgba(32, 32, 32, 0.1) 75%,      /* Almost transparent */
+    rgba(32, 32, 32, 0.3) 80%,      /* Very light fade in */
+    rgba(32, 32, 32, 0.5) 85%,      /* Lighter fade in */
+    rgba(32, 32, 32, 0.7) 90%,      /* Light fade in */
+    rgba(32, 32, 32, 0.9) 95%,      /* Slight fade in */
+    rgba(32, 32, 32, 1) 100%        /* Full opacity at the end */
+  );
+  z-index: 1; /* Ensure the overlay is above the image */
+  pointer-events: none; /* Allow interactions with elements below */
+}
