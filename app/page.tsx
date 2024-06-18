@@ -18,7 +18,7 @@ export default function Home() {
     const interval = setInterval(fetchBackground, 15000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [filmBackground]);
 
   return (
     <div className="flex flex-col h-full">
