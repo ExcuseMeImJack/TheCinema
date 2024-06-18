@@ -22,6 +22,8 @@ export async function GET(req: Request) {
 
     const filmBackgroundUrl = filmBackgroundsArr[Math.floor(Math.random() * filmBackgroundsArr.length)]
 
+    
+
     return NextResponse.json(filmBackgroundUrl, {status: 200});
   } catch (error) {
     console.error("Error fetching user data:", error);
