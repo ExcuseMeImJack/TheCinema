@@ -20,7 +20,8 @@ export async function GET(req: Request) {
     }
 
     const nowPlayingList = await response.json();
-    const filmBackgrounds = nowPlayingList.results.map((film: any) => film.backdrop_path);
+    const filmBackgrounds = nowPlayingList.results.filter((film: any) => film.vote_count >= 1000).map((film: any) => film.backdrop_path);
+
 
     return NextResponse.json({filmBackgrounds}, { status: 200 });
   } catch (error) {
