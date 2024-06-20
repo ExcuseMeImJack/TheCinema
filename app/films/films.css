@@ -1,0 +1,42 @@
+.tinted-div {
+  position: relative; /* Needed for the absolute positioning of the pseudo-elements */
+  width: 100%; /* Ensure it takes up the full width of the card */
+  height: 100%; /* Ensure it takes up the full height of the card */
+  overflow: hidden; /* Prevents content from overflowing */
+  border-radius: 0.4rem;
+}
+
+.tinted-div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0); /* Transparent by default */
+  transition: background-color 0.3s; /* Smooth transition */
+  pointer-events: none; /* Ensure that the tint doesn't interfere with any interactions */
+  border-radius: 0.4rem;
+}
+
+.tinted-div:hover::before {
+  background-color: rgba(0, 0, 0, 0.8); /* Black tint with 50% opacity on hover */
+  border-radius: 0.4rem;
+}
+
+.tinted-div .text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.8s;
+  padding: 0.4rem;
+  width: 100%; /* Ensures text doesn't overflow horizontally */
+  pointer-events: none; /* Ensure that the text overlay doesn't interfere with any interactions */
+}
+
+.tinted-div:hover .text-overlay {
+  opacity: 1;
+}
