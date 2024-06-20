@@ -9,3 +9,15 @@ export async function getRandomFilmBackground(){
     return({error: `Error Fetching User Data ${error}`});
   }
 }
+
+export async function getAllFilms(){
+  try {
+    const res = await fetch('/api/films/getAllFilms');
+    if(res.ok) {
+      const films = await res.json();
+      return films;
+    }
+  } catch (error) {
+    return({error: `Error Fetching User Data ${error}`});
+  }
+}
