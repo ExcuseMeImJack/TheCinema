@@ -29,8 +29,9 @@ function Films() {
       <h1 className='text-4xl font-HeaderFont font-bold text-center m-16'>FILMS</h1>
       <div className='films_container flex flex-wrap justify-evenly items-center gap-4'>
         {films.map((film, i) => (
-          <div className="card w-48 bg-base-100 shadow-xl" key={i}>
+          <div className="card w-48 bg-base-100 shadow-xl border-2 rounded-lg hover:border-[var(--interactHover)] hover:cursor-pointer" key={i}>
             <Image
+              className='rounded-lg'
               src={`https://image.tmdb.org/t/p/original${film.poster_path}`} alt={`Film Poster: ${film.poster_path}`}
               width={400}
               height={600}

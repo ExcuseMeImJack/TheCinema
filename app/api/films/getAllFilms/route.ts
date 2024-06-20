@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     let currentPage = 1;
     let totalPages = 1;
 
-    while (currentPage <= totalPages && allMovies.length < 1000) {
+    while (currentPage <= totalPages && allMovies.length < 500) {
       const response = await fetch(`${TMDB_API_URL}&page=${currentPage}`, {
         method: 'GET',
         headers: {
@@ -37,7 +37,7 @@ export async function GET(req: Request) {
 
 
     // Limit to the first 50 movies
-    const limitedMovies = allMovies.slice(0, 1000);
+    const limitedMovies = allMovies.slice(0, 500);
 
     return NextResponse.json({ films: limitedMovies }, { status: 200 });
   } catch (error) {

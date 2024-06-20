@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --interactHover: #A155B9;
+}
+
 body{
   background-color: #202020;
   color: #DEDEDE;
