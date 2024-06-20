@@ -28,7 +28,7 @@ function App({children}: imports) {
         ) : (
           <>
             <Navbar />
-            <div className="h-[89vh]">
+            <div className="">
               {children}
             </div>
           </>

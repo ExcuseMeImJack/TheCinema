@@ -41,7 +41,7 @@ export default function Home() {
   }, [filmBackgrounds]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[89vh]">
       <div className="w-screen h-screen flex flex-col justify-center items-center">
         <div className="relative w-[65%] h-full overflow-hidden fade-container">
           <Image
