@@ -10,12 +10,11 @@ export default function Home() {
   const [filmBackground, setFilmBackground] = useState("");
   const [filmBackgrounds, setFilmBackgrounds] = useState([]);
 
-  // Fetch the backgrounds initially
   useEffect(() => {
     const fetchBackgrounds = async () => {
       try {
         const backgrounds = await getRandomFilmBackground();
-        const backgroundsArr = Object.values(backgrounds)[0];
+        const backgroundsArr:any = Object.values(backgrounds)[0];
         setFilmBackgrounds(backgroundsArr);
         setFilmBackground(backgroundsArr[Math.floor(Math.random() * backgroundsArr.length)]);
       } catch (error) {

@@ -48,7 +48,7 @@ function SignIn() {
       router.refresh();
       if (res.status === 200) {
         setTimeout(() => {
-          router.push("/");
+          router.push("/profile");
           signIn("credentials", {
             redirect: false,
             email,
@@ -59,7 +59,7 @@ function SignIn() {
               setErrors(error);
             } else {
               router.refresh();
-              router.push('/');
+              router.push('/profile');
             }
           })
         }, 2000);
@@ -83,7 +83,7 @@ function SignIn() {
         setErrors(error);
       } else {
         router.refresh();
-        router.push('/');
+        router.push('/profile');
       }
     })
   }

@@ -48,7 +48,7 @@ function SignIn() {
         setErrors(error);
       } else {
         router.refresh();
-        router.push('/');
+        router.push('/profile');
       }
     })
   };
@@ -66,7 +66,7 @@ function SignIn() {
         setErrors(error);
       } else {
         router.refresh();
-        router.push('/');
+        router.push('/profile');
       }
     })
   }
