@@ -16,7 +16,7 @@ export async function GET(req: Request) {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${process.env.TMDB_BEARER}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_BEARER}`,
         },
       });
 
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
 
       // Aggregate movie data
       allMovies = [...allMovies, ...data.results];
-      allMovies.filter((film) => film.adult !== true)
+      allMovies.filter((film) => film.adult !== true || film.poster_path)
 
       // Update pagination info
       totalPages = data.total_pages;

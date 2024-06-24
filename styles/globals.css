@@ -7,7 +7,10 @@
   --highlight: #F765A3;
 }
 
-body{
+html{
   background-color: #202020;
+}
+
+body{
   color: #DEDEDE;
 }
