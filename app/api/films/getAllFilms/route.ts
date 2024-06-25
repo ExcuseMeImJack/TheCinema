@@ -28,7 +28,7 @@ export async function GET(req: Request) {
 
       // Aggregate movie data
       allMovies = [...allMovies, ...data.results];
-      allMovies.filter((film) => film.adult !== true || film.poster_path)
+      allMovies.filter((film) => film.adult !== true && film.poster_path)
 
       // Update pagination info
       totalPages = data.total_pages;

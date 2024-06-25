@@ -9,16 +9,25 @@ import { formatDate } from '../../lib/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 
-function Films() {
+interface Film {
+  id: number;
+  title: string;
+  release_date: string;
+  poster_path: string;
+  overview: string;
+  vote_average: number;
+}
 
-  const [films, setFilms] = useState([]);
+const Films: React.FC = () => {
+  const [films, setFilms] = useState<Film[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
     const fetchFilms = async () => {
       try {
-        const films = await getAllFilms();
-        setFilms(films.films);
+        const response = await getAllFilms();
+        setFilms(response.films);
       } catch (error) {
         console.error("Error fetching films:", error);
       }
@@ -27,7 +36,7 @@ function Films() {
     fetchFilms();
   }, []);
 
-  const getRatingStatus = (film) => {
+  const getRatingStatus = (film: Film) => {
     const releaseDate = new Date(film.release_date);
     const today = new Date();
 
@@ -39,7 +48,7 @@ function Films() {
     return rating.toFixed(1) + "/10";
   }
 
-  const openFilmDetails = (filmID) => {
+  const openFilmDetails = (filmID: number) => {
     router.refresh();
     router.push(`/films/${filmID}`);
   }
@@ -47,18 +56,18 @@ function Films() {
   return (
     <div className='mx-16'>
       <h1 className='text-4xl font-HeaderFont font-bold text-center mx-16 mt-16 mb-6'>FILMS</h1>
-      <SearchBar searchType={"film"} setSearchedItems={setFilms}/>
-      {!films ? <Loading loader={1} /> :
+      <SearchBar searchType={"film"} setSearchedItems={setFilms} setIsLoading={setIsLoading}/>
+      {films.length === 0 || isLoading ? <Loading loader={1} /> :
       <div className='films_container flex flex-wrap justify-evenly items-center gap-4'>
-        {films.map((film, i) => (
+        {films.map((film) => (
           <div
             className="card w-48 bg-base-100 shadow-xl border-2 rounded-lg hover:border-[var(--interactHover)] hover:cursor-pointer"
-            key={i}
+            key={film.id}
             onClick={() => openFilmDetails(film.id)}>
             <div className='tinted-div'>
               <Image
                 className='rounded-md'
-                src={`https://image.tmdb.org/t/p/original${film.poster_path}`} alt={`Film Poster: ${film.poster_path}`}
+                src={`https://image.tmdb.org/t/p/original${film.poster_path}`} alt={`Film Poster: ${film.title}`}
                 width={400}
                 height={600}
               />
