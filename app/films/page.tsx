@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { formatDate } from '../../lib/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
+import FilmFilters from '@/components/FilmFilters';
 
 interface Film {
   id: number;
@@ -34,6 +35,7 @@ const Films: React.FC = () => {
     }
 
     fetchFilms();
+
   }, []);
 
   const getRatingStatus = (film: Film) => {
@@ -59,6 +61,7 @@ const Films: React.FC = () => {
       {films.length === 0 || isLoading ? <Loading loader={1} /> :
         // Work on making justify-center to justify-start
         <div className='flex flex-col'>
+          <FilmFilters />
           <SearchBar searchType={"film"} setSearchedItems={setFilms} setIsLoading={setIsLoading} />
           <div className={`films_container flex flex-wrap justify-evenly gap-4`}>
             {films.map((film) => (

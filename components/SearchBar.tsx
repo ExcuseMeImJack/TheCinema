@@ -30,29 +30,30 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
         const films = await getFilmsBySearch(search);
         if (films.results.length === 0) {
           await fetchFilms();
+          console.log("Film Results Not Found")
         } else {
-          const searchedFilms = films.results.filter((film:any) => film.adult !== true && film.poster_path !== null);
+          const searchedFilms = films.results.filter((film: any) => film.adult !== true && film.poster_path !== null);
           setSearchedItems(searchedFilms);
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error searching films:", error);
+      } finally {
         setIsLoading(false);
       }
     }
 
     if (search.length > 3) {
       searchFilms();
-    } else if (search.length < 4) {
+    } else if (search.length <= 3) {
       fetchFilms();
     }
-  }, [search, searchType, setSearchedItems]);
+  }, [search, setSearchedItems]);
 
   return (
     <div className="flex justify-end m-3">
       {searchType === "film" && (
         <input
-          className='w-64 h-10 p-2 rounded-lg text-lg border-2 border-[var(--interactHover)]'
+          className='w-48 h-8 p-2 rounded-lg text-lg border-2 bg-[--blue] placeholder:text-white'
           type="text"
           placeholder="Search a Film"
           onChange={(e) => setSearch(e.target.value)}

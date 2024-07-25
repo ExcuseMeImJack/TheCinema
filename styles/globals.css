@@ -5,6 +5,10 @@
 :root {
   --interactHover: #A155B9;
   --highlight: #F765A3;
+  --blue: rgb(3 105 161 / 1);
+  --purple: #A155B9;
+  --pink: #F765A3;
+  --white: #DEDEDE;
   background-color: #202020;
 }
 

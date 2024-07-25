@@ -5,6 +5,7 @@ import { getServerSession, Session } from "next-auth";
 
 const TMDB_API_URL = 'https://api.themoviedb.org/3/trending/movie/week?language=en-US';
 
+
 export async function GET(req: Request) {
   try {
     let allMovies = [];
