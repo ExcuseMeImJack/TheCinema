@@ -5,7 +5,7 @@ import { getServerSession, Session } from "next-auth";
 
 const TMDB_API_URL = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
 
-
+export const dynamic = 'force-dynamic';
 export async function GET(req: Request) {
   try {
     const response = await fetch(TMDB_API_URL, {

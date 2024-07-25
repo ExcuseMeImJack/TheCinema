@@ -6,10 +6,9 @@ import React, { useEffect, useState } from 'react';
 type Imports = {
   searchType: string;
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
+function SearchBar({ searchType, setSearchedItems }: Imports) {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -17,16 +16,14 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
       try {
         const films = await getAllFilms();
         setSearchedItems(films.films);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching all films:", error);
-        setIsLoading(false);
       }
     }
 
     const searchFilms = async () => {
       try {
-        setIsLoading(true);
+        // setIsLoading(true);
         const films = await getFilmsBySearch(search);
         if (films.results.length === 0) {
           await fetchFilms();
@@ -38,7 +35,7 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
       } catch (error) {
         console.error("Error searching films:", error);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     }
 
@@ -50,10 +47,10 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
   }, [search, setSearchedItems]);
 
   return (
-    <div className="flex justify-end m-3">
+    <div>
       {searchType === "film" && (
         <input
-          className='w-48 h-8 p-2 rounded-lg text-lg border-2 bg-[--blue] placeholder:text-white'
+          className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white'
           type="text"
           placeholder="Search a Film"
           onChange={(e) => setSearch(e.target.value)}

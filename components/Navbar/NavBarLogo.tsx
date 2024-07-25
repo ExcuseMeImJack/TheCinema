@@ -16,7 +16,7 @@ function NavBarLogo() {
         </div>
 
         {/* Site Name */}
-        <h1 className='xl:text-4xl lg:text-3xl m:text-2xl sm:text-xl'>WATCHBOXD</h1>
+        <h1 className='xl:text-4xl lg:text-3xl m:text-2xl sm:text-xl font-HeaderFont'>WATCHBOXD</h1>
       </div>
   )
 }

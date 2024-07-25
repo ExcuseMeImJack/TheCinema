@@ -4,7 +4,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession, Session } from "next-auth";
 
 const TMDB_API_URL = 'https://api.themoviedb.org/3/trending/movie/week?language=en-US';
-
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     let currentPage = 1;
     let totalPages = 1;
 
-    while (currentPage <= totalPages && allMovies.length < 500) {
+    while (currentPage <= totalPages && allMovies.length < 250) {
       const response = await fetch(`${TMDB_API_URL}&page=${currentPage}`, {
         method: 'GET',
         headers: {
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
 
 
     // Limit to the first 50 movies
-    const limitedMovies = allMovies.slice(0, 500);
+    const limitedMovies = allMovies.slice(0, 250);
 
     return NextResponse.json({ films: limitedMovies }, { status: 200 });
   } catch (error) {
