@@ -34,8 +34,6 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
         }
       } catch (error) {
         console.error("Error searching films:", error);
-      } finally {
-        // setIsLoading(false);
       }
     }
 
@@ -52,7 +50,7 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
         <input
           className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white focus:outline-none'
           type="text"
-          placeholder="Search a Film"
+          placeholder="Find a Film"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
@@ -61,7 +59,7 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
       {searchType === "show" && (
         <input
           type="text"
-          placeholder="Search a Show"
+          placeholder="Find a Show"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
@@ -70,7 +68,7 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
       {searchType === "list" && (
         <input
           type="text"
-          placeholder="Search a List"
+          placeholder="Find a List"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
@@ -79,7 +77,7 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
       {searchType === "user" && (
         <input
           type="text"
-          placeholder="Search a User"
+          placeholder="Find a User"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />

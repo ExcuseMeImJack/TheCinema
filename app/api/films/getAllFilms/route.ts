@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {
-    let allMovies = [];
+    let allMovies:any = [];
     let currentPage = 1;
     let totalPages = 1;
 
@@ -29,7 +29,7 @@ export async function GET(req: Request) {
 
       // Aggregate movie data
       allMovies = [...allMovies, ...data.results];
-      allMovies.filter((film) => film.adult !== true && film.poster_path)
+      allMovies.filter((film:any) => film.adult !== true && film.poster_path)
 
       // Update pagination info
       totalPages = data.total_pages;
