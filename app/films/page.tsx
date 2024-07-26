@@ -69,31 +69,31 @@ const Films: React.FC = () => {
           <div className='border' />
 
           <div className={`films_container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3`}>
-  {films.map((film) => (
-    <div
-      className="card bg-base-100 shadow-xl border-2 rounded-lg hover:border-[var(--interactHover)] hover:cursor-pointer overflow-hidden"
-      key={film.id}
-      onClick={() => openFilmDetails(film.id)}
-    >
-      <div className='tinted-div'>
-        <Image
-          className='rounded-md w-full'
-          src={`https://image.tmdb.org/t/p/original${film.poster_path}`} alt={`Film Poster: ${film.title}`}
-          width={400}
-          height={600}
-        />
-        <div className="text-overlay flex flex-col gap-3 justify-evenly p-4">
-          <div>
-            <p className='font-bold text-lg'>{film.title}</p>
-            <p className='font-bold text-md text-gray-400'>{film.release_date.split('-')[0]}</p>
+            {films.map((film) => (
+              <div
+                className="card bg-base-100 shadow-xl border-2 rounded-lg hover:border-[var(--interactHover)] hover:cursor-pointer overflow-hidden"
+                key={`${film.title + "-" +film.id}`}
+                onClick={() => openFilmDetails(film.id)}
+              >
+                <div className='tinted-div'>
+                  <Image
+                    className='rounded-md w-full'
+                    src={`https://image.tmdb.org/t/p/original${film.poster_path}`} alt={`Film Poster: ${film.title}`}
+                    width={400}
+                    height={600}
+                  />
+                  <div className="text-overlay flex flex-col gap-3 justify-evenly p-4">
+                    <div>
+                      <p className='font-bold text-lg'>{film.title}</p>
+                      <p className='font-bold text-md text-gray-400'>{film.release_date.split('-')[0]}</p>
+                    </div>
+                    <p className='text-sm'>{film.overview.length > 125 ? (`${film.overview.slice(0, 125)}...`) : film.overview}</p>
+                    <p className='font-bold text-sm text-[var(--highlight)]'>{getRatingStatus(film)}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <p className='text-sm'>{film.overview.length > 125 ? (`${film.overview.slice(0, 125)}...`) : film.overview}</p>
-          <p className='font-bold text-sm text-[var(--highlight)]'>{getRatingStatus(film)}</p>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
 
         </div>}
     </div>

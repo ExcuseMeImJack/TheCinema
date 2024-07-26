@@ -50,7 +50,7 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
     <div>
       {searchType === "film" && (
         <input
-          className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white'
+          className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white focus:outline-none'
           type="text"
           placeholder="Search a Film"
           onChange={(e) => setSearch(e.target.value)}
