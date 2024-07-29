@@ -3,6 +3,7 @@
 import { getAllFilms, getFilmsBySearch } from '@/lib/FetchRequests/films';
 import React, { useEffect, useState } from 'react';
 
+
 type Imports = {
   searchType: string;
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
@@ -25,11 +26,11 @@ function SearchBar({ searchType, setSearchedItems }: Imports) {
       try {
         // setIsLoading(true);
         const films = await getFilmsBySearch(search);
-        if (films.results.length === 0) {
+        if (films.length === 0) {
           await fetchFilms();
           console.log("Film Results Not Found")
         } else {
-          const searchedFilms = films.results.filter((film: any) => film.adult !== true && film.poster_path !== null);
+          const searchedFilms = films;
           setSearchedItems(searchedFilms);
         }
       } catch (error) {

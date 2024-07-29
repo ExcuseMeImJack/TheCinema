@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     const filmBackgrounds = nowPlayingList.results.filter((film: any) => film.vote_count >= 1000).map((film: any) => film.backdrop_path);
 
 
-    return NextResponse.json({filmBackgrounds}, { status: 200 });
+    return NextResponse.json({ filmBackgrounds }, { status: 200 });
   } catch (error) {
     console.error("Error fetching film background:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

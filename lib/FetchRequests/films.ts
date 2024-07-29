@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import {isDateInFuture} from '@/lib/utils/isDateInFuture.js'
+import { isDateInFuture } from '@/lib/utils/isDateInFuture.js'
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
@@ -51,37 +51,30 @@ export async function getFilmsByYear(inputYear: string) {
     if (inputYear === 'All') return await getAllFilms();
 
     if (inputYear === 'Upcoming') {
-      let upcomingMovies: any[] = [];
-      let currentPage = 1;
-      let totalPages = 1;
 
-      while (currentPage <= totalPages && upcomingMovies.length < 250) {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?page=${currentPage}`, options);
+    }
 
-        if (!res.ok) {
-          const errorResponse = await res.json();
-          return { error: `Error Fetching Film Data: ${errorResponse.status_message}` };
-        }
-
-        const data = await res.json();
-        upcomingMovies = [
-          ...upcomingMovies,
-          ...data.results.filter((film: any) => !film.adult && film.poster_path && film.popularity > 15 && isDateInFuture(film.release_date, film.title)),
-        ];
-
-        totalPages = data.total_pages;
-        currentPage += 1;
-      }
-
-      const limitedMovies = upcomingMovies.slice(0, 250);
-      console.log(limitedMovies)
-      return { films: limitedMovies };
+    const decadeMatch = inputYear.match(/^(\d{4})s$/);
+    if (decadeMatch) {
+      const startYear = parseInt(decadeMatch[1], 10);
+      return await getFilmsByDecade(startYear);
     }
 
     return { error: 'Invalid year filter' };
   } catch (error: any) {
     return { error: `Error Fetching Film Data: ${error.message}` };
   }
+}
+
+async function getFilmsByDecade(startYear: number) {
+  const endYear = startYear + 9;
+  const response = await fetch(`https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=${startYear}-01-01&primary_release_date.lte=${endYear}-12-31`, options);
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    return { error: `Error Fetching Film Data: ${errorResponse.status_message}` };
+  }
+  const data = await response.json();
+  return { films: data.results };
 }
 
 // Fetch films by genre
@@ -111,21 +104,17 @@ export async function getFilmsByGenre(inputGenre: string) {
 
 // Fetch films by search query
 export async function getFilmsBySearch(search: string) {
-  if (!API_KEY) return { error: 'API key is missing' };
-
-  const TMDB_API_URL = 'https://api.themoviedb.org/3/search/movie?query=';
-  search = search.replace(/ /g, '+');
-
   try {
-    const res = await fetch(`${TMDB_API_URL}${search}&api_key=${API_KEY}`, options);
+    const res = await fetch(`/api/films/getFilmsBySearch?query=${encodeURIComponent(search)}`);
 
-    if (res.ok) {
-      return await res.json();
-    } else {
+    if (!res.ok) {
       const errorResponse = await res.json();
-      return { error: `Error Fetching Film Data: ${errorResponse.status_message}` };
+      return (`Error Fetching Film Data: ${errorResponse.error}`);
     }
+
+    const films = await res.json();
+    return (films);
   } catch (error: any) {
-    return { error: `Error Fetching Film Data: ${error.message}` };
+    return (`Error Fetching Film Data: ${error.message}`);
   }
 }

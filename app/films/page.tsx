@@ -43,7 +43,7 @@ const Films: React.FC = () => {
 
     fetchFilms();
 
-  }, []);
+  }, [setFilms]);
 
   const getRatingStatus = (film: Film) => {
     const releaseDate = new Date(film.release_date);
