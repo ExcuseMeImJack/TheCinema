@@ -69,7 +69,7 @@ const Films: React.FC = () => {
   const handleSearchResults = (results: Film[]) => {
     setFilms(results);
   };
-  console.log(films)
+  // console.log(films)
   return (
     <div className='mx-16'>
       <div className='flex flex-col gap-3'>

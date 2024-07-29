@@ -18,7 +18,7 @@ function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
       try {
         const films = await getFilmsByYear(yearFilter);
         setSearchedItems(films.films);
-        console.log(films)
+        // console.log(films)
       } catch(error) {
         console.error("Error fetching all films:", error);
       }

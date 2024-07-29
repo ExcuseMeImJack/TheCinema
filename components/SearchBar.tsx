@@ -20,14 +20,14 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
         if (searchTerm.length > 3) {
           const films = await getFilmsBySearch(searchTerm);
           if (films.length === 0) {
-            console.log("No results found, fetching all films.");
+            // console.log("No results found, fetching all films.");
             const allFilms = await getAllFilms();
             setSearchedItems(allFilms.films || []);
           } else {
             setSearchedItems(films);
           }
         } else {
-          console.log("Search term too short, fetching all films.");
+          // console.log("Search term too short, fetching all films.");
           const allFilms = await getAllFilms();
           setSearchedItems(allFilms.films || []);
         }

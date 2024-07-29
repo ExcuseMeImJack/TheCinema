@@ -28,11 +28,11 @@ function Profile() {
 
   if(status === 'loading') return <Loading loader={2}/>
 
-  console.log(user)
+  // console.log(user)
 
   return (
     <div className='w-screen flex flex-col justify-center items-center '>
-      
+
     </div>
   )
 }
