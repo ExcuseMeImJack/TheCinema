@@ -46,36 +46,19 @@ export async function getAllFilms() {
 
 // Fetch films by year
 export async function getFilmsByYear(inputYear: string) {
-  if (!API_KEY) return { error: 'API key is missing' };
-
   try {
-    if (inputYear === 'All') return await getAllFilms();
+    const res = await fetch(`/api/films/getFilmsByYear?query=${encodeURIComponent(inputYear)}`);
 
-    if (inputYear === 'Upcoming') {
-
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      return (`Error Fetching Film Data: ${errorResponse.error}`);
     }
 
-    const decadeMatch = inputYear.match(/^(\d{4})s$/);
-    if (decadeMatch) {
-      const startYear = parseInt(decadeMatch[1], 10);
-      return await getFilmsByDecade(startYear);
-    }
-
-    return { error: 'Invalid year filter' };
+    const films = await res.json();
+    return (films);
   } catch (error: any) {
-    return { error: `Error Fetching Film Data: ${error.message}` };
+    return (`Error Fetching Film Data: ${error.message}`);
   }
-}
-
-async function getFilmsByDecade(startYear: number) {
-  const endYear = startYear + 9;
-  const response = await fetch(`https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=${startYear}-01-01&primary_release_date.lte=${endYear}-12-31`, options);
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    return { error: `Error Fetching Film Data: ${errorResponse.status_message}` };
-  }
-  const data = await response.json();
-  return { films: data.results };
 }
 
 // Fetch films by genre

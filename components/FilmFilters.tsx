@@ -43,7 +43,7 @@ function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
     }
 
 
-  }, [genreFilter, yearFilter, setSearchedItems])
+  }, [genreFilter, yearFilter])
 
 
   return (
