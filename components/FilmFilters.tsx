@@ -5,9 +5,10 @@ import { getFilmsByGenre, getFilmsByYear } from '@/lib/FetchRequests/films';
 
 type Imports = {
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function FilmFilters({setSearchedItems}: Imports) {
+function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
 
   const [genreFilter, setGenreFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");

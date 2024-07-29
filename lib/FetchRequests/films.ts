@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isDateInFuture } from '@/lib/utils/isDateInFuture.js'
+import { genres } from '../utils/genreCodes';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 

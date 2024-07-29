@@ -1,49 +1,51 @@
 'use client'
 
 import { getAllFilms, getFilmsBySearch } from '@/lib/FetchRequests/films';
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect, useState, useCallback } from 'react';
+import { debounce } from '@/lib/utils/debounce';
 
 type Imports = {
   searchType: string;
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function SearchBar({ searchType, setSearchedItems }: Imports) {
+function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const fetchFilms = async () => {
+  const debouncedSearch = useCallback(
+    debounce(async (searchTerm: string) => {
+      setIsLoading(true);
       try {
-        const films = await getAllFilms();
-        setSearchedItems(films.films);
-      } catch (error) {
-        console.error("Error fetching all films:", error);
-      }
-    }
-
-    const searchFilms = async () => {
-      try {
-        // setIsLoading(true);
-        const films = await getFilmsBySearch(search);
-        if (films.length === 0) {
-          await fetchFilms();
-          console.log("Film Results Not Found")
+        if (searchTerm.length > 3) {
+          const films = await getFilmsBySearch(searchTerm);
+          if (films.length === 0) {
+            console.log("No results found, fetching all films.");
+            const allFilms = await getAllFilms();
+            setSearchedItems(allFilms.films || []);
+          } else {
+            setSearchedItems(films);
+          }
         } else {
-          const searchedFilms = films;
-          setSearchedItems(searchedFilms);
+          console.log("Search term too short, fetching all films.");
+          const allFilms = await getAllFilms();
+          setSearchedItems(allFilms.films || []);
         }
       } catch (error) {
-        console.error("Error searching films:", error);
+        console.error("Error fetching films:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    }, 500), // Adjust debounce delay as needed
+    [setSearchedItems, setIsLoading]
+  );
 
-    if (search.length > 3) {
-      searchFilms();
-    } else if (search.length <= 3) {
-      fetchFilms();
+  useEffect(() => {
+    // Only call debouncedSearch if search term actually changes
+    if (search) {
+      debouncedSearch(search);
     }
-  }, [search, setSearchedItems]);
+  }, [search]);
 
   return (
     <div>
