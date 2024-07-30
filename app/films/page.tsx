@@ -30,6 +30,12 @@ const Films: React.FC = () => {
       try {
         const response = await getAllFilms();
         if (response.films) {
+          // Log IDs to check for duplicates
+          const ids = response.films.map(film => film.id);
+          const uniqueIds = new Set(ids);
+          if (ids.length !== uniqueIds.size) {
+            console.error("Duplicate film IDs found:", ids);
+          }
           setFilms(response.films);
         } else {
           console.error("No films data received:", response);
@@ -43,6 +49,7 @@ const Films: React.FC = () => {
 
     fetchFilms();
   }, []);
+
 
   const getRatingStatus = useCallback((film: Film) => {
     const releaseDate = new Date(film.release_date);

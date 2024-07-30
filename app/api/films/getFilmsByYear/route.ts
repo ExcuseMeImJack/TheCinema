@@ -1,3 +1,4 @@
+import { isDateInFuture } from '@/lib/utils/isDateInFuture';
 import { NextResponse } from 'next/server';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -15,41 +16,7 @@ export async function GET(req: Request) {
 
   try {
     if (year === 'All') {
-      try {
-        let allMovies: any[] = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages && allMovies.length < 250) {
-          const response = await fetch(`${TMDB_API_URL}&page=${currentPage}`, {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${BEARER_TOKEN}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data from TMDB');
-          }
-
-          const data = await response.json();
-          totalPages = data.total_pages;
-          currentPage += 1;
-
-          // Filter and aggregate movie data
-          const filteredMovies = data.results.filter((film: any) => !film.adult && film.poster_path);
-          allMovies = [...allMovies, ...filteredMovies];
-        }
-
-        // Limit to the first 250 movies
-        const limitedMovies = allMovies.slice(0, 250);
-
-        return NextResponse.json({ films: limitedMovies }, { status: 200 });
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-      }
+      return await getAllMovies();
     }
 
     if (year === 'Upcoming') {
@@ -70,43 +37,67 @@ export async function GET(req: Request) {
 }
 
 async function fetchTMDBData(url: string) {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'accept': 'application/json',
-      'Authorization': `Bearer ${BEARER_TOKEN}`,
-    },
-  });
+  let allMovies: any[] = [];
+  let currentPage = 1;
+  let totalPages = 1;
 
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    return NextResponse.json({ error: `Error Fetching Film Data: ${errorResponse.status_message}` }, { status: response.status });
+  while (currentPage <= totalPages && allMovies.length < 150) {
+    const pageUrl = `${url}&page=${currentPage}`;
+    const response = await fetch(pageUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${BEARER_TOKEN}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(`Error Fetching Film Data: ${errorResponse.status_message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    totalPages = data.total_pages;
+    currentPage += 1;
+
+    const filteredMovies = data.results.filter((film: any) => !film.adult && film.poster_path !== null);
+    allMovies = [...allMovies, ...filteredMovies];
   }
-  const data = await response.json();
-  return data.results.filter((film: any) => !film.adult && film.poster_path !== null);
+
+  return allMovies.slice(0, 150);
+}
+
+async function getAllMovies() {
+  try {
+    const films = await fetchTMDBData(TMDB_API_URL);
+    return NextResponse.json({ films }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching all movies:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
 
 async function getFilmsByDecade(startYear: number) {
   const endYear = startYear + 9;
   const url = `https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=${startYear}-01-01&primary_release_date.lte=${endYear}-12-31`;
-  const films = await fetchTMDBData(url);
-  return NextResponse.json({ films }, { status: 200 });
+  try {
+    const films = await fetchTMDBData(url);
+    return NextResponse.json({ films }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching films by decade:", error);
+    return NextResponse.json({ error: "Failed to fetch films by decade" }, { status: 500 });
+  }
 }
 
 async function getUpcomingFilms() {
-  // Get today's date and format it as yyyy-mm-dd
   const today = new Date();
-  const todayDate = today.toISOString().split('T')[0]; // Convert to yyyy-mm-dd format
-
-  // Construct the API URL with the date filter for upcoming films
+  const todayDate = today.toISOString().split('T')[0];
   const url = `https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=${todayDate}`;
 
   try {
-    // Fetch and filter the movies
     const films = await fetchTMDBData(url);
-
-    // Return the filtered list of upcoming films
-    return NextResponse.json({ films }, { status: 200 });
+    const upcomingFilms = films.filter(film => isDateInFuture(film.release_date));
+    return NextResponse.json({ films: upcomingFilms }, { status: 200 });
   } catch (error) {
     console.error("Error fetching upcoming films:", error);
     return NextResponse.json({ error: "Failed to fetch upcoming films" }, { status: 500 });
