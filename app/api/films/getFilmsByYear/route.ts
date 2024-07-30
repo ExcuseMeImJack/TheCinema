@@ -94,7 +94,21 @@ async function getFilmsByDecade(startYear: number) {
 }
 
 async function getUpcomingFilms() {
-  const url = `https://api.themoviedb.org/3/movie/upcoming`;
-  const films = await fetchTMDBData(url);
-  return NextResponse.json({ films }, { status: 200 });
+  // Get today's date and format it as yyyy-mm-dd
+  const today = new Date();
+  const todayDate = today.toISOString().split('T')[0]; // Convert to yyyy-mm-dd format
+
+  // Construct the API URL with the date filter for upcoming films
+  const url = `https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=${todayDate}`;
+
+  try {
+    // Fetch and filter the movies
+    const films = await fetchTMDBData(url);
+
+    // Return the filtered list of upcoming films
+    return NextResponse.json({ films }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching upcoming films:", error);
+    return NextResponse.json({ error: "Failed to fetch upcoming films" }, { status: 500 });
+  }
 }
