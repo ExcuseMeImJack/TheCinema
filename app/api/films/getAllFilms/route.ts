@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {
-    let allMovies:any = [];
+    let allMovies: any[] = [];
     let currentPage = 1;
     let totalPages = 1;
 
@@ -27,18 +27,25 @@ export async function GET(req: Request) {
 
       const data = await response.json();
 
-      // Aggregate movie data
-      allMovies = [...allMovies, ...data.results];
-      allMovies.filter((film:any) => film.adult !== true && film.poster_path)
+      // Aggregate movie data and filter out adult content and movies without posters
+      const filteredMovies = data.results.filter((film: any) => !film.adult && film.poster_path);
+      allMovies = [...allMovies, ...filteredMovies];
 
       // Update pagination info
       totalPages = data.total_pages;
       currentPage += 1;
     }
 
+    // Ensure unique movies by ID
+    const uniqueMoviesMap = new Map();
+    allMovies.forEach((film) => {
+      if (!uniqueMoviesMap.has(film.id)) {
+        uniqueMoviesMap.set(film.id, film);
+      }
+    });
 
-    // Limit to the first 50 movies
-    const limitedMovies = allMovies.slice(0, 250);
+    // Convert Map values to an array and limit to 250 movies
+    const limitedMovies = Array.from(uniqueMoviesMap.values()).slice(0, 250);
 
     return NextResponse.json({ films: limitedMovies }, { status: 200 });
   } catch (error) {

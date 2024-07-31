@@ -24,7 +24,19 @@ export async function GET(req: Request) {
 
     if (res.ok) {
       const data = await res.json();
-      return NextResponse.json(data.results.filter((film: any) => film.adult !== true && film.poster_path !== null) );
+
+      // Use a Map to ensure unique films by id
+      const uniqueMoviesMap = new Map();
+      data.results.forEach((film: any) => {
+        if (!film.adult && film.poster_path !== null && !uniqueMoviesMap.has(film.id)) {
+          uniqueMoviesMap.set(film.id, film);
+        }
+      });
+
+      // Convert the Map values to an array
+      const uniqueMovies = Array.from(uniqueMoviesMap.values());
+
+      return NextResponse.json(uniqueMovies);
     } else {
       const errorResponse = await res.json();
       return NextResponse.json({ error: `Error Fetching Film Data: ${errorResponse.status_message}` }, { status: res.status });

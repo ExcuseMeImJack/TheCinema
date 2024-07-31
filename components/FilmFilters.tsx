@@ -35,7 +35,7 @@ function FilmFilters({ setSearchedItems, setIsLoading, setSearchFilter, genreFil
     const fetchFilmsByGenre = async () => {
       setIsLoading(true);
       try {
-        const films = await getFilmsByGenre(yearFilter);
+        const films = await getFilmsByGenre(genreFilter);
         // setSearchedItems(films.films);
         console.log(films)
       } catch (error) {

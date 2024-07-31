@@ -69,7 +69,7 @@ export async function getFilmsByGenre(inputGenre: string) {
   const TMDB_API_URL = 'https://api.themoviedb.org/3/discover/movie?with_genres=';
 
   try {
-    const genreCode = genres.MOVIE[inputGenre];
+    const genreCode = genres["MOVIE"][inputGenre];
     if (!genreCode) return { error: 'Invalid genre' };
 
     const res = await fetch(`${TMDB_API_URL}${genreCode}`, options);

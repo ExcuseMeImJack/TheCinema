@@ -37,11 +37,11 @@ export async function GET(req: Request) {
 }
 
 async function fetchTMDBData(url: string) {
-  let allMovies: any[] = [];
+  const uniqueMoviesMap = new Map(); // Map to store unique films
   let currentPage = 1;
   let totalPages = 1;
 
-  while (currentPage <= totalPages && allMovies.length < 150) {
+  while (currentPage <= totalPages && uniqueMoviesMap.size < 150) {
     const pageUrl = `${url}&page=${currentPage}`;
     const response = await fetch(pageUrl, {
       method: 'GET',
@@ -60,11 +60,15 @@ async function fetchTMDBData(url: string) {
     totalPages = data.total_pages;
     currentPage += 1;
 
-    const filteredMovies = data.results.filter((film: any) => !film.adult && film.poster_path !== null);
-    allMovies = [...allMovies, ...filteredMovies];
+    // Filter and add unique movies to the map
+    data.results.forEach((film: any) => {
+      if (!film.adult && film.poster_path !== null && !uniqueMoviesMap.has(film.id)) {
+        uniqueMoviesMap.set(film.id, film);
+      }
+    });
   }
 
-  return allMovies.slice(0, 150);
+  return Array.from(uniqueMoviesMap.values()).slice(0, 150); // Return an array of films
 }
 
 async function getAllMovies() {
