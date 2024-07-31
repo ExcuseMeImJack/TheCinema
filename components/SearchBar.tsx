@@ -1,89 +1,94 @@
 'use client'
 
 import { getAllFilms, getFilmsBySearch } from '@/lib/FetchRequests/films';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { debounce } from '@/lib/utils/debounce';
 
 type Imports = {
   searchType: string;
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<any>>;
+  searchFilter: string;
+  setSearchFilter: React.Dispatch<React.SetStateAction<any>>;
+  setGenreFilter: React.Dispatch<React.SetStateAction<any>>;
+  setYearFilter: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
-  const [search, setSearch] = useState("");
+function SearchBar({ searchType, setSearchedItems, setIsLoading, searchFilter, setSearchFilter, setGenreFilter, setYearFilter }: Imports) {
 
-  useEffect(() => {
-    const fetchFilms = async () => {
-      try {
-        const films = await getAllFilms();
-        setSearchedItems(films.films);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching all films:", error);
-        setIsLoading(false);
-      }
-    }
 
-    const searchFilms = async () => {
+  const debouncedSearch = useCallback(
+    debounce(async (searchTerm: string) => {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
-        const films = await getFilmsBySearch(search);
-        if (films.results.length === 0) {
-          await fetchFilms();
+        if (searchTerm.length > 3) {
+          const films = await getFilmsBySearch(searchTerm);
+          if (films.length === 0) {
+            // console.log("No results found, fetching all films.");
+            const allFilms = await getAllFilms();
+            setSearchedItems(allFilms.films || []);
+          } else {
+            setSearchedItems(films);
+          }
         } else {
-          const searchedFilms = films.results.filter((film:any) => film.adult !== true && film.poster_path !== null);
-          setSearchedItems(searchedFilms);
-          setIsLoading(false);
+          // console.log("Search term too short, fetching all films.");
+          const allFilms = await getAllFilms();
+          setSearchedItems(allFilms.films || []);
         }
       } catch (error) {
-        console.error("Error searching films:", error);
+        console.error("Error fetching films:", error);
+      } finally {
+        setGenreFilter("");
+        setYearFilter("");
         setIsLoading(false);
       }
-    }
+    }, 500), // Adjust debounce delay as needed
+    [setSearchedItems, setIsLoading]
+  );
 
-    if (search.length > 3) {
-      searchFilms();
-    } else if (search.length < 4) {
-      fetchFilms();
+  useEffect(() => {
+    // Only call debouncedSearch if search term actually changes
+    if (searchFilter) {
+      debouncedSearch(searchFilter);
     }
-  }, [search, searchType, setSearchedItems]);
+  }, [searchFilter]);
 
   return (
-    <div className="flex justify-end m-3">
+    <div>
       {searchType === "film" && (
         <input
-          className='w-64 h-10 p-2 rounded-lg text-lg border-2 border-[var(--interactHover)]'
+          className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white focus:outline-none'
           type="text"
-          placeholder="Search a Film"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          placeholder="Find a Film"
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
       {searchType === "show" && (
         <input
           type="text"
-          placeholder="Search a Show"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          placeholder="Find a Show"
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
       {searchType === "list" && (
         <input
           type="text"
-          placeholder="Search a List"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          placeholder="Find a List"
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
       {searchType === "user" && (
         <input
           type="text"
-          placeholder="Search a User"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          placeholder="Find a User"
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
     </div>
