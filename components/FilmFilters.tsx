@@ -36,7 +36,7 @@ function FilmFilters({ setSearchedItems, setIsLoading, setSearchFilter, genreFil
       setIsLoading(true);
       try {
         const films = await getFilmsByGenre(genreFilter);
-        // setSearchedItems(films.films);
+        setSearchedItems(films.films);
         console.log(films)
       } catch (error) {
         console.error("Error fetching all films:", error);
@@ -46,6 +46,14 @@ function FilmFilters({ setSearchedItems, setIsLoading, setSearchFilter, genreFil
         setIsLoading(false);
       }
     }
+
+    // const fetchFilmsByFilter = async () => {
+
+    // }
+
+    // if(yearFilter || genreFilter) {
+    //   fetchFilmsByFilter();
+    // }
 
     if (yearFilter) {
       fetchFilmsByYear();

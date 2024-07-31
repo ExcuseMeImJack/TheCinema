@@ -63,26 +63,18 @@ export async function getFilmsByYear(inputYear: string) {
 
 // Fetch films by genre
 export async function getFilmsByGenre(inputGenre: string) {
-  if (!API_KEY) return { error: 'API key is missing' };
-
-  // Define TMDB API URL for fetching films by genre
-  const TMDB_API_URL = 'https://api.themoviedb.org/3/discover/movie?with_genres=';
-
   try {
-    const genreCode = genres["MOVIE"][inputGenre];
-    if (!genreCode) return { error: 'Invalid genre' };
+    const res = await fetch(`/api/films/getFilmsByGenre?query=${encodeURIComponent(inputGenre)}`);
 
-    const res = await fetch(`${TMDB_API_URL}${genreCode}`, options);
-
-    if (res.ok) {
-      const films = await res.json();
-      return { films: films.results };
-    } else {
+    if (!res.ok) {
       const errorResponse = await res.json();
-      return { error: `Error Fetching Film Data: ${errorResponse.status_message}` };
+      return (`Error Fetching Film Data: ${errorResponse.error}`);
     }
+
+    const films = await res.json();
+    return (films);
   } catch (error: any) {
-    return { error: `Error Fetching Film Data: ${error.message}` };
+    return (`Error Fetching Film Data: ${error.message}`);
   }
 }
 
