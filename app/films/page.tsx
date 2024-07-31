@@ -88,9 +88,9 @@ const Films: React.FC = () => {
         <div className='flex justify-between'>
           <h1 className='text-6xl font-HeaderFont font-bold mt-10'>FILMS</h1>
           <div className='flex items-end gap-3'>
-            <FilmFilters setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} searchFilter={searchFilter} setSearchFilter={setSearchFilter} genreFilter={genreFilter} setGenreFilter={setGenreFilter} yearFilter={yearFilter} setYearFilter={setYearFilter}/>
+            <FilmFilters setSearchedItems={handleSearchResults} setIsLoading={setIsLoading}setSearchFilter={setSearchFilter} genreFilter={genreFilter} setGenreFilter={setGenreFilter} yearFilter={yearFilter} setYearFilter={setYearFilter}/>
             <p className='font-bold font-HeaderFont'>OR</p>
-            <SearchBar searchType={"film"} setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} searchFilter={searchFilter} setSearchFilter={setSearchFilter} genreFilter={genreFilter} setGenreFilter={setGenreFilter} yearFilter={yearFilter} setYearFilter={setYearFilter}/>
+            <SearchBar searchType={"film"} setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} searchFilter={searchFilter} setSearchFilter={setSearchFilter} setGenreFilter={setGenreFilter} setYearFilter={setYearFilter}/>
           </div>
         </div>
         <div className='border' />

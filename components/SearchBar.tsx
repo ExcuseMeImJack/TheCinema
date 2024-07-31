@@ -10,13 +10,11 @@ type Imports = {
   setIsLoading: React.Dispatch<React.SetStateAction<any>>;
   searchFilter: string;
   setSearchFilter: React.Dispatch<React.SetStateAction<any>>;
-  genreFilter: string;
   setGenreFilter: React.Dispatch<React.SetStateAction<any>>;
-  yearFilter: string;
   setYearFilter: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function SearchBar({ searchType, setSearchedItems, setIsLoading, searchFilter, setSearchFilter, genreFilter, setGenreFilter, yearFilter, setYearFilter }: Imports) {
+function SearchBar({ searchType, setSearchedItems, setIsLoading, searchFilter, setSearchFilter, setGenreFilter, setYearFilter }: Imports) {
 
 
   const debouncedSearch = useCallback(
@@ -40,6 +38,8 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading, searchFilter, s
       } catch (error) {
         console.error("Error fetching films:", error);
       } finally {
+        setGenreFilter("");
+        setYearFilter("");
         setIsLoading(false);
       }
     }, 500), // Adjust debounce delay as needed
