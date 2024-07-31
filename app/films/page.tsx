@@ -22,6 +22,11 @@ interface Film {
 const Films: React.FC = () => {
   const [films, setFilms] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [genreFilter, setGenreFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
+
   const router = useRouter();
 
   useEffect(() => {
@@ -31,7 +36,7 @@ const Films: React.FC = () => {
         const response = await getAllFilms();
         if (response.films) {
           // Log IDs to check for duplicates
-          const ids = response.films.map(film => film.id);
+          const ids = response.films.map((film: any) => film.id);
           const uniqueIds = new Set(ids);
           if (ids.length !== uniqueIds.size) {
             console.error("Duplicate film IDs found:", ids);
@@ -82,9 +87,10 @@ const Films: React.FC = () => {
       <div className='flex flex-col gap-3'>
         <div className='flex justify-between'>
           <h1 className='text-6xl font-HeaderFont font-bold mt-10'>FILMS</h1>
-          <div className='flex items-end gap-8'>
-            <FilmFilters setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} />
-            <SearchBar searchType={"film"} setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} />
+          <div className='flex items-end gap-3'>
+            <FilmFilters setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} searchFilter={searchFilter} setSearchFilter={setSearchFilter} genreFilter={genreFilter} setGenreFilter={setGenreFilter} yearFilter={yearFilter} setYearFilter={setYearFilter}/>
+            <p className='font-bold font-HeaderFont'>OR</p>
+            <SearchBar searchType={"film"} setSearchedItems={handleSearchResults} setIsLoading={setIsLoading} searchFilter={searchFilter} setSearchFilter={setSearchFilter} genreFilter={genreFilter} setGenreFilter={setGenreFilter} yearFilter={yearFilter} setYearFilter={setYearFilter}/>
           </div>
         </div>
         <div className='border' />

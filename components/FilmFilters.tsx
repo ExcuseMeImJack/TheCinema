@@ -6,15 +6,19 @@ import { getFilmsByGenre, getFilmsByYear } from '@/lib/FetchRequests/films';
 type Imports = {
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
   setIsLoading: React.Dispatch<React.SetStateAction<any>>;
+  searchFilter: string;
+  setSearchFilter: React.Dispatch<React.SetStateAction<any>>;
+  genreFilter: string;
+  setGenreFilter: React.Dispatch<React.SetStateAction<any>>;
+  yearFilter: string;
+  setYearFilter: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
-
-  const [genreFilter, setGenreFilter] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
+function FilmFilters({setSearchedItems, setIsLoading, searchFilter, setSearchFilter, genreFilter, setGenreFilter, yearFilter, setYearFilter}: Imports) {
 
   useEffect(() => {
     const fetchFilmsByYear = async () => {
+      setIsLoading(true);
       try {
         const films = await getFilmsByYear(yearFilter);
         setSearchedItems(films.films);
@@ -22,9 +26,11 @@ function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
       } catch(error) {
         console.error("Error fetching all films:", error);
       }
+      setIsLoading(false);
     }
 
     const fetchFilmsByGenre = async () => {
+      setIsLoading(true);
       try {
         const films = await getFilmsByGenre(yearFilter);
         // setSearchedItems(films.films);
@@ -32,6 +38,7 @@ function FilmFilters({setSearchedItems, setIsLoading}: Imports) {
       } catch(error) {
         console.error("Error fetching all films:", error);
       }
+      setIsLoading(false);
     }
 
     if (yearFilter) {

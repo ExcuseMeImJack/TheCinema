@@ -8,10 +8,16 @@ type Imports = {
   searchType: string;
   setSearchedItems: React.Dispatch<React.SetStateAction<any>>;
   setIsLoading: React.Dispatch<React.SetStateAction<any>>;
+  searchFilter: string;
+  setSearchFilter: React.Dispatch<React.SetStateAction<any>>;
+  genreFilter: string;
+  setGenreFilter: React.Dispatch<React.SetStateAction<any>>;
+  yearFilter: string;
+  setYearFilter: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
-  const [search, setSearch] = useState("");
+function SearchBar({ searchType, setSearchedItems, setIsLoading, searchFilter, setSearchFilter, genreFilter, setGenreFilter, yearFilter, setYearFilter }: Imports) {
+
 
   const debouncedSearch = useCallback(
     debounce(async (searchTerm: string) => {
@@ -42,10 +48,10 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
 
   useEffect(() => {
     // Only call debouncedSearch if search term actually changes
-    if (search) {
-      debouncedSearch(search);
+    if (searchFilter) {
+      debouncedSearch(searchFilter);
     }
-  }, [search]);
+  }, [searchFilter]);
 
   return (
     <div>
@@ -54,8 +60,8 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
           className='w-48 h-9 p-2 rounded-lg text-md border-2 bg-[--blue] text-white placeholder:text-white focus:outline-none'
           type="text"
           placeholder="Find a Film"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
@@ -63,8 +69,8 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
         <input
           type="text"
           placeholder="Find a Show"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
@@ -72,8 +78,8 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
         <input
           type="text"
           placeholder="Find a List"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
 
@@ -81,8 +87,8 @@ function SearchBar({ searchType, setSearchedItems, setIsLoading }: Imports) {
         <input
           type="text"
           placeholder="Find a User"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter}
         />
       )}
     </div>
