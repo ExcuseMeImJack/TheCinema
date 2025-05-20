@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-[89vh]">
       <div className="w-screen h-screen flex flex-col justify-center items-center">
-        <div className="relative w-[65%] h-full overflow-hidden fade-container">
+        <div className="relative w-[75%] h-full overflow-hidden fade-container">
           <Image
             alt={`Film Background Image: ${filmBackground}`}
             src={filmBackground ? `https://image.tmdb.org/t/p/original${filmBackground}` : "https://i.imgur.com/W2oTx5H.jpg"}
