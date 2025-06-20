@@ -1,147 +1,164 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
-
-model ShowLists {
-  id      Int          @id @default(autoincrement())
-  show    ShowsFromAPI @relation(fields: [show_id], references: [show_api_id])
-  show_id String
-  list    Lists        @relation(fields: [list_id], references: [id])
-  list_id Int
-}
-
-model FilmLists {
-  id      Int          @id @default(autoincrement())
-  film    FilmsFromAPI @relation(fields: [film_id], references: [film_api_id])
-  film_id String
-  list    Lists        @relation(fields: [list_id], references: [id])
-  list_id Int
-}
-
-model ShowsFromAPI {
-  id           String         @id
-  show_api_id  String         @unique
-  ShowLists    ShowLists[]
-  ShowsToWatch ShowsToWatch[]
-  ShowLikes    ShowLikes[]
-  Reviews      Reviews[]
-}
-
-model FilmsFromAPI {
-  id           String         @id
-  film_api_id  String         @unique
-  FilmLists    FilmLists[]
-  FilmsToWatch FilmsToWatch[]
-  FilmLikes    FilmLikes[]
-  Reviews      Reviews[]
-}
-
-model Lists {
-  id          Int         @id @default(autoincrement())
-  name        String
-  description String?
-  is_private  Boolean
-  user        User        @relation(fields: [user_id], references: [id])
-  user_id     Int
-  ShowLists   ShowLists[]
-  FilmLists   FilmLists[]
-  ListLikes   ListLikes[]
-}
-
-model ListLikes {
-  id      Int   @id @default(autoincrement())
-  user    User  @relation(fields: [user_id], references: [id])
-  user_id Int
-  list    Lists @relation(fields: [list_id], references: [id])
-  list_id Int
-}
-
-model ShowsToWatch {
-  id      Int          @id @default(autoincrement())
-  user    User         @relation(fields: [user_id], references: [id])
-  user_id Int
-  show    ShowsFromAPI @relation(fields: [show_id], references: [id])
-  show_id String
-}
-
-model FilmsToWatch {
-  id      Int          @id @default(autoincrement())
-  user    User         @relation(fields: [user_id], references: [id])
-  user_id Int
-  film    FilmsFromAPI @relation(fields: [film_id], references: [id])
-  film_id String
-}
-
-model FilmLikes {
-  id      Int          @id @default(autoincrement())
-  user    User         @relation(fields: [user_id], references: [id])
-  user_id Int
-  film    FilmsFromAPI @relation(fields: [film_id], references: [id])
-  film_id String
-}
-
-model ShowLikes {
-  id      Int          @id @default(autoincrement())
-  user    User         @relation(fields: [user_id], references: [id])
-  user_id Int
-  show    ShowsFromAPI @relation(fields: [show_id], references: [id])
-  show_id String
-}
-
-model Reviews {
-  id          Int           @id @default(autoincrement())
-  review_text String
-  rating      Float
-  user        User          @relation(fields: [user_id], references: [id])
-  user_id     Int
-  film        FilmsFromAPI? @relation(fields: [film_id], references: [id])
-  film_id     String?
-  show        ShowsFromAPI? @relation(fields: [show_id], references: [id])
-  show_id     String?
+  provider   = "postgresql"
+  url        = env("POSTGRES_PRISMA_URL")        // connection pooling
+  directUrl  = env("POSTGRES_URL_NON_POOLING")   // direct connection
 }
 
 model User {
-  id              Int            @id @default(autoincrement())
-  username        String         @unique
-  email           String         @unique
+  id              Int              @id @default(autoincrement())
+  username        String           @unique
+  email           String           @unique
   password        String
-  is_private      Boolean?
+  is_private      Boolean?         
   profile_pic_url String?
-  Lists           Lists[]
-  ListLikes       ListLikes[]
-  ShowsToWatch    ShowsToWatch[]
-  FilmsToWatch    FilmsToWatch[]
-  FilmLikes       FilmLikes[]
-  ShowLikes       ShowLikes[]
-  Reviews         Reviews[]
-  Friends         Friends[]
+  
+  Lists           List[]           // user-created lists
+  ListLikes       ListLike[]       
+  ShowsToWatch    ShowToWatch[]    // interests / want to watch
+  FilmsToWatch    FilmToWatch[]
+  FilmLikes       FilmLike[]
+  ShowLikes       ShowLike[]
+  Reviews         Review[]
+  Friends         Friend[]         // users this user follows
+  Followers       Friend[]         @relation("Followers") // users following this user
+  DirectMessagesSent     DirectMessage[] @relation("SentMessages")
+  DirectMessagesReceived DirectMessage[] @relation("ReceivedMessages")
 }
 
-// model DirectMessages{
-//     id          Int     @id @default(autoincrement())
-//     message     String
-//     sender User @relation(fields: [user_from_id], references: [id])
-//     user_from_id Int
-//     recipient  User @relation(fields: [user_to_id], references: [id])
-//     user_to_id  Int
-//     friend   Friends? @relation(fields: [friend_id], references: [id])
-//     friend_id Int
-// }
+model Film {
+  id          String           @id
+  api_id      String           @unique
+  title       String
+  description String?
+  release_date DateTime?
+  
+  FilmLists   FilmList[]
+  FilmsToWatch FilmToWatch[]
+  FilmLikes   FilmLike[]
+  Reviews     Review[]
+}
 
-model Friends {
-  id        Int  @id @default(autoincrement())
-  friend_id Int
-  user      User @relation(fields: [user_id], references: [id])
-  user_id   Int
-  // DirectMessages DirectMessages[]
+model Show {
+  id          String           @id
+  api_id      String           @unique
+  title       String
+  description String?
+  first_air_date DateTime?
+  
+  ShowLists   ShowList[]
+  ShowsToWatch ShowToWatch[]
+  ShowLikes   ShowLike[]
+  Reviews     Review[]
+}
+
+model List {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  is_private  Boolean      @default(false)
+  user        User         @relation(fields: [user_id], references: [id])
+  user_id     Int
+  ShowLists   ShowList[]
+  FilmLists   FilmList[]
+  ListLikes   ListLike[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model ShowList {
+  id      Int    @id @default(autoincrement())
+  show    Show   @relation(fields: [show_id], references: [id])
+  show_id String
+  list    List   @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model FilmList {
+  id      Int    @id @default(autoincrement())
+  film    Film   @relation(fields: [film_id], references: [id])
+  film_id String
+  list    List   @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model ListLike {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [user_id], references: [id])
+  user_id Int
+  list    List  @relation(fields: [list_id], references: [id])
+  list_id Int
+}
+
+model ShowToWatch {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id Int
+  show    Show   @relation(fields: [show_id], references: [id])
+  show_id String
+  createdAt DateTime @default(now())
+}
+
+model FilmToWatch {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id Int
+  film    Film   @relation(fields: [film_id], references: [id])
+  film_id String
+  createdAt DateTime @default(now())
+}
+
+model FilmLike {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id Int
+  film    Film   @relation(fields: [film_id], references: [id])
+  film_id String
+  createdAt DateTime @default(now())
+}
+
+model ShowLike {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id Int
+  show    Show   @relation(fields: [show_id], references: [id])
+  show_id String
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id          Int     @id @default(autoincrement())
+  review_text String
+  rating      Float
+  user        User    @relation(fields: [user_id], references: [id])
+  user_id     Int
+  film        Film?   @relation(fields: [film_id], references: [id])
+  film_id     String?
+  show        Show?   @relation(fields: [show_id], references: [id])
+  show_id     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Friend {
+  id          Int    @id @default(autoincrement())
+  user        User   @relation(fields: [user_id], references: [id])
+  user_id     Int
+  friend      User   @relation("Followers", fields: [friend_id], references: [id])
+  friend_id   Int
+  createdAt   DateTime @default(now())
+}
+
+model DirectMessage {
+  id           Int     @id @default(autoincrement())
+  message      String
+  sender       User    @relation("SentMessages", fields: [sender_id], references: [id])
+  sender_id    Int
+  recipient    User    @relation("ReceivedMessages", fields: [recipient_id], references: [id])
+  recipient_id Int
+  createdAt    DateTime @default(now())
 }
